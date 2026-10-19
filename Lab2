@@ -1,0 +1,102 @@
+
+import 'dart:io';
+
+class Student {
+  String fullName;
+  int idNumber;
+  List<double> grades;
+
+  Student({
+    required this.fullName,
+    required this.idNumber,
+    required this.grades,
+  });
+
+  void displayProfile() {
+    print("\nName: $fullName");
+    print("ID Number: $idNumber");
+    print("Grades Logged:");
+
+    for (int i = 0; i < grades.length; i++) {
+      print("Subject ${i + 1}: ${grades[i]}");
+    }
+  }
+}
+
+void computeGrade(List<double> grades) {
+  double sum = grades[0] + grades[1] + grades[2];
+  double average = sum / 3;
+
+  print("Average Grade: ${average.toStringAsFixed(2)}");
+
+  if (average >= 75) {
+    print("Status: Passed");
+  } else if (average >= 70) {
+    print("Status: Conditional");
+  } else {
+    print("Status: Failed");
+  }
+}
+
+void main() {
+  List<String> subjects = [
+    'Mathematics',
+    'Science',
+    'History'
+  ];
+
+  List<double> enteredGrades = [];
+
+  print("Enter Student Data");
+
+  stdout.write("Enter full name: ");
+  String fullName = stdin.readLineSync() ?? "";
+
+  stdout.write("Enter ID number: ");
+  int? idNumber;
+
+  while (idNumber == null) {
+    String input = stdin.readLineSync() ?? "";
+    idNumber = int.tryParse(input);
+
+    if (idNumber == null) {
+      print("Error: Please enter a valid ID number.");
+      stdout.write("Enter ID number again: ");
+    }
+  }
+
+  for (String subject in subjects) {
+    double? grade;
+
+    while (grade == null) {
+      stdout.write("Enter grade for $subject: ");
+      String input = stdin.readLineSync() ?? "";
+
+      double? parsedGrade = double.tryParse(input);
+
+      if (parsedGrade == null) {
+        print("Error: Please enter a valid number.");
+      } else if (parsedGrade < 0 || parsedGrade > 100) {
+        print("Error: Grade must be between 0 and 100.");
+      } else {
+        grade = parsedGrade;
+      }
+
+      if (grade == null) {
+        print("Please try again.");
+      }
+    }
+
+    enteredGrades.add(grade);
+  }
+
+  Student student = Student(
+    fullName: fullName,
+    idNumber: idNumber,
+    grades: enteredGrades,
+  );
+
+  student.displayProfile();
+  computeGrade(student.grades);
+}
+
